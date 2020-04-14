@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {withTheme} from 'react-native-paper';
 import {View} from 'react-native';
 import {
   Avatar,
@@ -15,8 +16,16 @@ import {styles} from './styles';
 import {Icon} from 'react-native-elements';
 
 function DrawerContent(props) {
+  console.log(props);
+
+  const [isDarkTheme, setDarkTheme] = useState(false);
+
+  const toggleTheme = () => {
+    setDarkTheme(!isDarkTheme);
+  };
+
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, color: props.theme.colors.background}}>
       <DrawerContentScrollView {...props}>
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
@@ -59,7 +68,7 @@ function DrawerContent(props) {
                 />
               )}
               label="Home"
-              onPress={() => console.log('Home')}
+              onPress={() => props.navigation.navigate('Home')}
             />
             <DrawerItem
               icon={({color, size}) => (
@@ -95,7 +104,7 @@ function DrawerContent(props) {
                 />
               )}
               label="Settings"
-              onPress={() => console.log('Settings')}
+              onPress={() => props.navigation.navigate('Setting')}
             />
             <DrawerItem
               icon={({color, size}) => (
@@ -109,6 +118,22 @@ function DrawerContent(props) {
               label="Support"
               onPress={() => console.log('Support')}
             />
+          </Drawer.Section>
+          <Drawer.Section title="Preference">
+            <TouchableRipple
+              onPress={() => {
+                toggleTheme();
+              }}>
+              <View style={styles.preference}>
+                <Text>Dark Theme</Text>
+                <View pointerEvents="none">
+                  <Switch
+                    value={isDarkTheme}
+                    style={{color: props.theme.primary}}
+                  />
+                </View>
+              </View>
+            </TouchableRipple>
           </Drawer.Section>
         </View>
       </DrawerContentScrollView>
@@ -124,4 +149,4 @@ function DrawerContent(props) {
   );
 }
 
-export default DrawerContent;
+export default withTheme(DrawerContent);
