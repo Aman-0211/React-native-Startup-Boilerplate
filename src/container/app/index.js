@@ -1,9 +1,18 @@
 import React from 'react';
 import {View, Text} from 'react-native';
+import {withTheme} from 'react-native-paper';
 
-function App({navigation}) {
+function App({navigation, theme, ...rest}) {
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: !theme.dark
+          ? theme.lightTheme.background
+          : theme.lightTheme.background,
+      }}>
       <Text
         style={{textAlign: 'center'}}
         onPress={() => {
@@ -15,4 +24,4 @@ function App({navigation}) {
   );
 }
 
-export default App;
+export default withTheme(App);

@@ -10,12 +10,20 @@ export const store = configureStore(axios, {});
 function App() {
   const theme = {
     ...DefaultTheme,
-    dark: true,
-    colors: {
+    dark: false,
+    lightTheme: {
       ...DefaultTheme.colors,
       primary: 'tomato',
       accent: 'black',
-      background: 'black',
+      background: '#fff',
+    },
+    darkTheme: {
+      ...DefaultTheme.colors,
+      primary: 'tomato',
+      accent: 'black',
+      background: '#2b2a2a',
+      text: '#fff',
+      onBackground: '#fff',
     },
   };
 

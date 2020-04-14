@@ -16,16 +16,21 @@ import {styles} from './styles';
 import {Icon} from 'react-native-elements';
 
 function DrawerContent(props) {
-  console.log(props);
-
-  const [isDarkTheme, setDarkTheme] = useState(false);
+  const [isDarkTheme, setDarkTheme] = useState(true);
 
   const toggleTheme = () => {
     setDarkTheme(!isDarkTheme);
+    props.theme.dark = isDarkTheme;
   };
 
   return (
-    <View style={{flex: 1, color: props.theme.colors.background}}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: props.theme.dark
+          ? props.theme.lightTheme.background
+          : props.theme.darkTheme.background,
+      }}>
       <DrawerContentScrollView {...props}>
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
@@ -38,23 +43,75 @@ function DrawerContent(props) {
                 size={50}
               />
               <View style={{flexDirection: 'column', marginLeft: 15}}>
-                <Title>Aman Thakur</Title>
-                <Caption>@Aman-0211</Caption>
+                <Title
+                  style={{
+                    color: props.theme.dark
+                      ? props.theme.lightTheme.text
+                      : props.theme.darkTheme.text,
+                  }}>
+                  Aman Thakur
+                </Title>
+                <Caption
+                  style={{
+                    color: props.theme.dark
+                      ? props.theme.lightTheme.text
+                      : props.theme.darkTheme.text,
+                  }}>
+                  @Aman-0211
+                </Caption>
               </View>
             </View>
           </View>
           <View style={[styles.row, {marginLeft: 20}]}>
             <View style={styles.section}>
-              <Paragraph style={[styles.paragraph, styles.caption]}>
+              <Paragraph
+                style={[
+                  styles.paragraph,
+                  styles.caption,
+                  {
+                    color: props.theme.dark
+                      ? props.theme.lightTheme.text
+                      : props.theme.darkTheme.text,
+                  },
+                ]}>
                 80
               </Paragraph>
-              <Caption style={styles.caption}>Following</Caption>
+              <Caption
+                style={[
+                  styles.caption,
+                  {
+                    color: props.theme.dark
+                      ? props.theme.lightTheme.text
+                      : props.theme.darkTheme.text,
+                  },
+                ]}>
+                Following
+              </Caption>
             </View>
             <View style={styles.section}>
-              <Paragraph style={[styles.paragraph, styles.caption]}>
+              <Paragraph
+                style={[
+                  styles.paragraph,
+                  styles.caption,
+                  {
+                    color: props.theme.dark
+                      ? props.theme.lightTheme.text
+                      : props.theme.darkTheme.text,
+                  },
+                ]}>
                 100
               </Paragraph>
-              <Caption style={styles.caption}>Follower</Caption>
+              <Caption
+                style={[
+                  styles.caption,
+                  {
+                    color: props.theme.dark
+                      ? props.theme.lightTheme.text
+                      : props.theme.darkTheme.text,
+                  },
+                ]}>
+                Follower
+              </Caption>
             </View>
           </View>
           <Drawer.Section style={styles.drawerSection}>
@@ -63,11 +120,20 @@ function DrawerContent(props) {
                 <Icon
                   name="home"
                   type="font-awesome"
-                  color={color}
+                  color={
+                    props.theme.dark
+                      ? props.theme.lightTheme.text
+                      : props.theme.darkTheme.text
+                  }
                   size={size}
                 />
               )}
               label="Home"
+              labelStyle={{
+                color: props.theme.dark
+                  ? props.theme.lightTheme.text
+                  : props.theme.darkTheme.text,
+              }}
               onPress={() => props.navigation.navigate('Home')}
             />
             <DrawerItem
@@ -75,11 +141,20 @@ function DrawerContent(props) {
                 <Icon
                   name="user"
                   type="font-awesome"
-                  color={color}
+                  color={
+                    props.theme.dark
+                      ? props.theme.lightTheme.text
+                      : props.theme.darkTheme.text
+                  }
                   size={size}
                 />
               )}
               label="Profile"
+              labelStyle={{
+                color: props.theme.dark
+                  ? props.theme.lightTheme.text
+                  : props.theme.darkTheme.text,
+              }}
               onPress={() => console.log('Profile')}
             />
             <DrawerItem
@@ -87,11 +162,20 @@ function DrawerContent(props) {
                 <Icon
                   name="bookmark"
                   type="font-awesome"
-                  color={color}
+                  color={
+                    props.theme.dark
+                      ? props.theme.lightTheme.text
+                      : props.theme.darkTheme.text
+                  }
                   size={size}
                 />
               )}
               label="Bookmark"
+              labelStyle={{
+                color: props.theme.dark
+                  ? props.theme.lightTheme.text
+                  : props.theme.darkTheme.text,
+              }}
               onPress={() => console.log('Bookmark')}
             />
             <DrawerItem
@@ -99,11 +183,20 @@ function DrawerContent(props) {
                 <Icon
                   name="cogs"
                   type="font-awesome"
-                  color={color}
+                  color={
+                    props.theme.dark
+                      ? props.theme.lightTheme.text
+                      : props.theme.darkTheme.text
+                  }
                   size={size}
                 />
               )}
               label="Settings"
+              labelStyle={{
+                color: props.theme.dark
+                  ? props.theme.lightTheme.text
+                  : props.theme.darkTheme.text,
+              }}
               onPress={() => props.navigation.navigate('Setting')}
             />
             <DrawerItem
@@ -111,25 +204,57 @@ function DrawerContent(props) {
                 <Icon
                   name="question"
                   type="font-awesome"
-                  color={color}
+                  color={
+                    props.theme.dark
+                      ? props.theme.lightTheme.text
+                      : props.theme.darkTheme.text
+                  }
                   size={size}
                 />
               )}
               label="Support"
+              labelStyle={{
+                color: props.theme.dark
+                  ? props.theme.lightTheme.text
+                  : props.theme.darkTheme.text,
+              }}
               onPress={() => console.log('Support')}
             />
           </Drawer.Section>
-          <Drawer.Section title="Preference">
+          <Drawer.Section style={[styles.drawerSection]}>
+            <Caption
+              style={[
+                {
+                  color: props.theme.dark
+                    ? props.theme.lightTheme.text
+                    : props.theme.darkTheme.text,
+                  marginLeft: 18,
+                  fontSize: 14,
+                },
+              ]}>
+              Preference
+            </Caption>
             <TouchableRipple
               onPress={() => {
                 toggleTheme();
               }}>
               <View style={styles.preference}>
-                <Text>Dark Theme</Text>
+                <Text
+                  style={{
+                    color: props.theme.dark
+                      ? props.theme.lightTheme.text
+                      : props.theme.darkTheme.text,
+                  }}>
+                  Dark Theme
+                </Text>
                 <View pointerEvents="none">
                   <Switch
                     value={isDarkTheme}
-                    style={{color: props.theme.primary}}
+                    color={
+                      !props.theme.dark
+                        ? props.theme.lightTheme.text
+                        : props.theme.darkTheme.text
+                    }
                   />
                 </View>
               </View>
@@ -140,8 +265,21 @@ function DrawerContent(props) {
       <Drawer.Section style={styles.bottomDrawerSection}>
         <DrawerItem
           label="Sign Out"
+          labelStyle={{
+            color: props.theme.dark
+              ? props.theme.lightTheme.text
+              : props.theme.darkTheme.text,
+          }}
           icon={({color, size}) => (
-            <Icon name="exit-to-app" color={color} size={size} />
+            <Icon
+              name="exit-to-app"
+              color={
+                props.theme.dark
+                  ? props.theme.lightTheme.text
+                  : props.theme.darkTheme.text
+              }
+              size={size}
+            />
           )}
         />
       </Drawer.Section>

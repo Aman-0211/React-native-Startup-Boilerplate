@@ -10,7 +10,7 @@ import {Apps, Setting} from './container';
 
 const Stack = createStackNavigator();
 
-function DashBoard(props) {
+function DashBoard() {
   return (
     <Stack.Navigator
       initialRouteName="Home"
@@ -36,7 +36,7 @@ function SettingSrack() {
 
 const Drawer = createDrawerNavigator();
 
-function MyDrawer(props) {
+function MyDrawer() {
   return (
     <Drawer.Navigator
       initialRouteName="Home"

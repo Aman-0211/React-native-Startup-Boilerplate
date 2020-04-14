@@ -1,7 +1,7 @@
 import React from 'react';
 import {Appbar} from 'react-native-paper';
 
-function HeaderView({navigation, scene}) {
+function HeaderView({navigation, scene, ...rest}) {
   const _goBack = () => navigation.toggleDrawer();
 
   const _handleSearch = () => console.log('Searching');

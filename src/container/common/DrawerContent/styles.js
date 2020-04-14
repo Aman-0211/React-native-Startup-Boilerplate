@@ -32,6 +32,8 @@ export const styles = StyleSheet.create({
   },
   drawerSection: {
     marginTop: 15,
+    borderTopColor: '#f4f4f4',
+    borderTopWidth: 1,
   },
   bottomDrawerSection: {
     marginBottom: 15,
