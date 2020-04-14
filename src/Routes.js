@@ -2,7 +2,8 @@ import React from 'react';
 import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
+import {DrawerContent} from '../src/container/common';
 import {HeaderView} from '../src/component';
 
 import {Apps, Setting} from './container';
@@ -39,10 +40,7 @@ function MyDrawer(props) {
   return (
     <Drawer.Navigator
       initialRouteName="Home"
-      drawerStyle={{
-        backgroundColor: '#c6cbef',
-        width: 240,
-      }}>
+      drawerContent={props => <DrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={DashBoard} />
       <Drawer.Screen name="Setting" component={SettingSrack} />
     </Drawer.Navigator>
