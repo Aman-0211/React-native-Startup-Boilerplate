@@ -48,6 +48,68 @@ function DrawerContent(props) {
               <Caption style={styles.caption}>Follower</Caption>
             </View>
           </View>
+          <Drawer.Section style={styles.drawerSection}>
+            <DrawerItem
+              icon={({color, size}) => (
+                <Icon
+                  name="home"
+                  type="font-awesome"
+                  color={color}
+                  size={size}
+                />
+              )}
+              label="Home"
+              onPress={() => console.log('Home')}
+            />
+            <DrawerItem
+              icon={({color, size}) => (
+                <Icon
+                  name="user"
+                  type="font-awesome"
+                  color={color}
+                  size={size}
+                />
+              )}
+              label="Profile"
+              onPress={() => console.log('Profile')}
+            />
+            <DrawerItem
+              icon={({color, size}) => (
+                <Icon
+                  name="bookmark"
+                  type="font-awesome"
+                  color={color}
+                  size={size}
+                />
+              )}
+              label="Bookmark"
+              onPress={() => console.log('Bookmark')}
+            />
+            <DrawerItem
+              icon={({color, size}) => (
+                <Icon
+                  name="cogs"
+                  type="font-awesome"
+                  color={color}
+                  size={size}
+                />
+              )}
+              label="Settings"
+              onPress={() => console.log('Settings')}
+            />
+            <DrawerItem
+              icon={({color, size}) => (
+                <Icon
+                  name="question"
+                  type="font-awesome"
+                  color={color}
+                  size={size}
+                />
+              )}
+              label="Support"
+              onPress={() => console.log('Support')}
+            />
+          </Drawer.Section>
         </View>
       </DrawerContentScrollView>
       <Drawer.Section style={styles.bottomDrawerSection}>
