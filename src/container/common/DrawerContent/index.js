@@ -28,17 +28,14 @@ function DrawerContent(props) {
     props.theme.dark = isDarkTheme;
   };
 
-  console.log('props,', props);
   const SignOut = async () => {
     props.dispatch({
       type: RESET_USER_DATA,
     });
-    await AsyncStorage.removeItem('access_token');
+    console.log('proinside signoutps');
+    await AsyncStorage.clear();
   };
 
-  useEffect(() => {
-    signOut();
-  }, []);
   const {user} = props.authenticatedata.data;
   return (
     <View

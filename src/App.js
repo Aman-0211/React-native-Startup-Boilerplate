@@ -10,7 +10,7 @@ export const store = configureStore(axios, {});
 function App() {
   const theme = {
     ...DefaultTheme,
-    dark: false,
+    dark: true,
     lightTheme: {
       ...DefaultTheme.colors,
       primary: 'tomato',

@@ -18,15 +18,21 @@ import {
   Avatar,
   TouchableRipple,
 } from 'react-native-paper';
+import {CheckBox} from 'react-native-elements';
+
 import {compose} from 'redux';
 import {connect} from 'react-redux';
-import {DEVICE_WIDTH, signIn} from '../../../shared/store';
+import {
+  DEVICE_WIDTH,
+  signIn,
+  setUserInfo,
+  getUserInfo,
+} from '../../../shared/store';
 import {
   GET_USER_AUTHENTICATION_REQUEST,
   GET_USER_AUTHENTICATION,
   GET_USER_AUTHENTICATION_FAIL,
 } from '../../../shared/store/constants';
-import {GET_SIGNUP_REQUEST_FAIL} from '../SignUp/constant';
 
 export const AVTAR_HEIGHT = DEVICE_WIDTH / 4;
 export const AVTAR_HEIGHT_SMALL =
@@ -42,6 +48,7 @@ function SignIn(props) {
   const [value, setValue] = useState({
     username: '',
     password: '',
+    checked: false,
     error: false,
   });
 
@@ -67,6 +74,20 @@ function SignIn(props) {
     };
   }, []);
 
+  const KeepedmeLogin = async () => {
+    const value = await getUserInfo();
+    if (value.keep_me_logged_in === 'true') {
+      props.dispatch({
+        type: GET_USER_AUTHENTICATION,
+        payload: value,
+      });
+    }
+  };
+
+  useEffect(() => {
+    KeepedmeLogin();
+  }, []);
+
   function onKeyboardWillShow(event) {
     Animated.timing(imageHeight, {
       duration: Platform.OS === 'ios' ? event.duration : 0,
@@ -87,7 +108,10 @@ function SignIn(props) {
         type: GET_USER_AUTHENTICATION_REQUEST,
       });
       const userInfo = await signIn(value);
-      await AsyncStorage.setItem('access_token', userInfo.data.token);
+      await setUserInfo(userInfo.data, value.checked);
+      const user = await getUserInfo();
+      console.log('use3r', user);
+
       props.dispatch({
         type: GET_USER_AUTHENTICATION,
         payload: userInfo.data,
@@ -152,6 +176,21 @@ function SignIn(props) {
           <HelperText type="error" visible={_hasePasswordErrors()}>
             Password must contain atleast 8 character!
           </HelperText>
+
+          <CheckBox
+            title="Keeped me login  "
+            checked={value.checked}
+            containerStyle={{
+              borderWidth: 0,
+              backgroundColor: '#fff',
+              marginLeft: 0,
+            }}
+            checkedColor="#5D3EFF"
+            textStyle={{fontWeight: '400', color: '#000'}}
+            onPress={() =>
+              setValue(value => ({...value, checked: !value.checked}))
+            }
+          />
           <Button
             icon={!props.authenticatedata.isLoading ? 'login' : 'loading'}
             mode="contained"

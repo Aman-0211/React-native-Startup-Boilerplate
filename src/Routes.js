@@ -9,6 +9,7 @@ import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
 import {DrawerContent} from '../src/container/common';
 import {HeaderView} from '../src/component';
 import {Apps, Setting, SignIn, SignUp} from './container';
+import {getUserInfo} from './shared/store';
 
 const Stack = createStackNavigator();
 
@@ -67,20 +68,11 @@ function MyDrawer() {
 }
 
 const RootStack = props => {
-  const [userToken, setuserToken] = useState(null);
-
-  const access_token = async () => {
-    const value = await AsyncStorage.getItem('access_token');
-    await setuserToken(value);
-  };
-
-  useEffect(() => {
-    access_token();
-  }, [props.authenticatedata.data]);
+  console.log(props);
 
   return (
     <NavigationContainer>
-      {userToken == null ? <AuthStack /> : <MyDrawer />}
+      {props.authenticatedata.loggedin ? <MyDrawer /> : <AuthStack />}
     </NavigationContainer>
   );
 };
