@@ -1,6 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {withTheme} from 'react-native-paper';
+import {compose} from 'redux';
+import {connect} from 'react-redux';
 import {View} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   Avatar,
   Title,
@@ -14,6 +17,8 @@ import {
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {styles} from './styles';
 import {Icon} from 'react-native-elements';
+import {signOut} from '../../../shared/store';
+import {RESET_USER_DATA} from '../../../shared/store/constants';
 
 function DrawerContent(props) {
   const [isDarkTheme, setDarkTheme] = useState(true);
@@ -22,6 +27,19 @@ function DrawerContent(props) {
     setDarkTheme(!isDarkTheme);
     props.theme.dark = isDarkTheme;
   };
+
+  const SignOut = async () => {
+    console.log('props,', props);
+
+    props.dispatch({
+      type: RESET_USER_DATA,
+    });
+    await AsyncStorage.removeItem('access_token');
+  };
+
+  useEffect(() => {
+    signOut();
+  }, []);
 
   return (
     <View
@@ -281,10 +299,15 @@ function DrawerContent(props) {
               size={size}
             />
           )}
+          onPress={() => SignOut()}
         />
       </Drawer.Section>
     </View>
   );
 }
 
-export default withTheme(DrawerContent);
+const mapStateToProps = store => ({
+  authenticatedata: store.userAuthencation,
+});
+
+export default connect(mapStateToProps)(withTheme(DrawerContent));

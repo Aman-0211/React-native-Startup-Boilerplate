@@ -1,14 +1,33 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import {compose} from 'redux';
+import {connect} from 'react-redux';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
 import {DrawerContent} from '../src/container/common';
 import {HeaderView} from '../src/component';
-
-import {Apps, Setting} from './container';
+import {Apps, Setting, SignIn, SignUp} from './container';
 
 const Stack = createStackNavigator();
+
+function AuthStack() {
+  return (
+    <Stack.Navigator initialRouteName="SignIn">
+      <Stack.Screen
+        name="Login"
+        component={SignIn}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Registration"
+        component={SignUp}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
+}
 
 function DashBoard() {
   return (
@@ -47,10 +66,26 @@ function MyDrawer() {
   );
 }
 
-const RootStack = () => (
-  <NavigationContainer>
-    <MyDrawer />
-  </NavigationContainer>
-);
+const RootStack = props => {
+  const [userToken, setuserToken] = useState(null);
 
-export default RootStack;
+  const access_token = async () => {
+    const value = await AsyncStorage.getItem('access_token');
+    await setuserToken(value);
+  };
+
+  useEffect(() => {
+    access_token();
+  }, [props.authenticatedata.data]);
+
+  return (
+    <NavigationContainer>
+      {userToken == null ? <AuthStack /> : <MyDrawer />}
+    </NavigationContainer>
+  );
+};
+
+const mapStateToProps = store => ({
+  authenticatedata: store.userAuthencation,
+});
+export default connect(mapStateToProps)(RootStack);

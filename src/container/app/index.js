@@ -9,7 +9,7 @@ function App({navigation, theme, ...rest}) {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: !theme.dark
+        backgroundColor: theme.dark
           ? theme.lightTheme.background
           : theme.lightTheme.background,
       }}>
