@@ -28,9 +28,8 @@ function DrawerContent(props) {
     props.theme.dark = isDarkTheme;
   };
 
+  console.log('props,', props);
   const SignOut = async () => {
-    console.log('props,', props);
-
     props.dispatch({
       type: RESET_USER_DATA,
     });
@@ -40,7 +39,7 @@ function DrawerContent(props) {
   useEffect(() => {
     signOut();
   }, []);
-
+  const {user} = props.authenticatedata.data;
   return (
     <View
       style={{
@@ -67,7 +66,7 @@ function DrawerContent(props) {
                       ? props.theme.lightTheme.text
                       : props.theme.darkTheme.text,
                   }}>
-                  Aman Thakur
+                  {`${user ? user.name : null} ${user ? user.lastname : null}`}
                 </Title>
                 <Caption
                   style={{
@@ -75,7 +74,7 @@ function DrawerContent(props) {
                       ? props.theme.lightTheme.text
                       : props.theme.darkTheme.text,
                   }}>
-                  @Aman-0211
+                  {user ? user.email : null}
                 </Caption>
               </View>
             </View>
