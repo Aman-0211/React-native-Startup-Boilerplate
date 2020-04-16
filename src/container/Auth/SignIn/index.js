@@ -7,6 +7,7 @@ import {
   NativeModules,
   Animated,
   Platform,
+  Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {
@@ -20,7 +21,12 @@ import {
 import {compose} from 'redux';
 import {connect} from 'react-redux';
 import {DEVICE_WIDTH, signIn} from '../../../shared/store';
-import {GET_USER_AUTHENTICATION} from '../../../shared/store/constants';
+import {
+  GET_USER_AUTHENTICATION_REQUEST,
+  GET_USER_AUTHENTICATION,
+  GET_USER_AUTHENTICATION_FAIL,
+} from '../../../shared/store/constants';
+import {GET_SIGNUP_REQUEST_FAIL} from '../SignUp/constant';
 
 export const AVTAR_HEIGHT = DEVICE_WIDTH / 4;
 export const AVTAR_HEIGHT_SMALL =
@@ -77,14 +83,20 @@ function SignIn(props) {
 
   const onSubmit = async () => {
     try {
+      props.dispatch({
+        type: GET_USER_AUTHENTICATION_REQUEST,
+      });
       const userInfo = await signIn(value);
       await AsyncStorage.setItem('access_token', userInfo.data.token);
-
       props.dispatch({
         type: GET_USER_AUTHENTICATION,
         payload: userInfo.data,
       });
     } catch (error) {
+      props.dispatch({
+        type: GET_USER_AUTHENTICATION_FAIL,
+      });
+      errorMessage();
       setValue({...value, error: true});
       console.log(error);
     }
@@ -99,6 +111,8 @@ function SignIn(props) {
   const _hasePasswordErrors = () => {
     return value.password.length < 8;
   };
+
+  const errorMessage = () => Alert.alert('Invalid email or password');
 
   return (
     <KeyboardAvoidingView
@@ -139,14 +153,15 @@ function SignIn(props) {
             Password must contain atleast 8 character!
           </HelperText>
           <Button
-            icon="login"
+            icon={!props.authenticatedata.isLoading ? 'login' : 'loading'}
             mode="contained"
+            disabled={props.authenticatedata.isLoading}
             onPress={() => {
               onSubmit();
               Keyboard.dismiss();
             }}
             style={styles.loginButton}>
-            Press me
+            Login
           </Button>
           <TouchableRipple
             onPress={() => props.navigation.navigate('Registration')}
