@@ -22,17 +22,13 @@ import {CheckBox} from 'react-native-elements';
 
 import {compose} from 'redux';
 import {connect} from 'react-redux';
-import {
-  DEVICE_WIDTH,
-  signIn,
-  setUserInfo,
-  getUserInfo,
-} from '../../../shared/store';
+import {DEVICE_WIDTH, signIn, setUserInfo} from '../../../shared/store';
 import {
   GET_USER_AUTHENTICATION_REQUEST,
   GET_USER_AUTHENTICATION,
   GET_USER_AUTHENTICATION_FAIL,
 } from '../../../shared/store/constants';
+import {withUserInfo} from '../../../framework';
 
 export const AVTAR_HEIGHT = DEVICE_WIDTH / 4;
 export const AVTAR_HEIGHT_SMALL =
@@ -45,10 +41,10 @@ export const AVTAR_HEIGHT_SMALL =
 const imageHeight = new Animated.Value(AVTAR_HEIGHT);
 
 function SignIn(props) {
+  const [checked, setChecked] = useState(false);
   const [value, setValue] = useState({
     username: '',
     password: '',
-    checked: false,
     error: false,
   });
 
@@ -74,20 +70,6 @@ function SignIn(props) {
     };
   }, []);
 
-  const KeepedmeLogin = async () => {
-    const value = await getUserInfo();
-    if (value.keep_me_logged_in === 'true') {
-      props.dispatch({
-        type: GET_USER_AUTHENTICATION,
-        payload: value,
-      });
-    }
-  };
-
-  useEffect(() => {
-    KeepedmeLogin();
-  }, []);
-
   function onKeyboardWillShow(event) {
     Animated.timing(imageHeight, {
       duration: Platform.OS === 'ios' ? event.duration : 0,
@@ -102,16 +84,24 @@ function SignIn(props) {
     }).start();
   }
 
+  async function onChecked() {
+    if (!checked) {
+      setChecked(true);
+      await AsyncStorage.setItem('keepLoggedIn', 'true');
+    } else {
+      setChecked(false);
+      await AsyncStorage.setItem('keepLoggedIn', 'false');
+    }
+  }
+
   const onSubmit = async () => {
     try {
       props.dispatch({
         type: GET_USER_AUTHENTICATION_REQUEST,
       });
       const userInfo = await signIn(value);
-      await setUserInfo(userInfo.data, value.checked);
-      const user = await getUserInfo();
-      console.log('use3r', user);
-
+      await setUserInfo(userInfo.data);
+      await props.setUserInfo(userInfo.data);
       props.dispatch({
         type: GET_USER_AUTHENTICATION,
         payload: userInfo.data,
@@ -145,7 +135,10 @@ function SignIn(props) {
       style={styles.container}>
       <View style={styles.loginContainer}>
         <View style={styles.avatar}>
-          <Avatar.Icon size={100} icon="account" />
+          <Avatar.Image
+            size={100}
+            source={require('../../../assets/logo.png')}
+          />
         </View>
         <View style={styles.inputForm}>
           <TextInput
@@ -154,7 +147,7 @@ function SignIn(props) {
             mode="outlined"
             underlineColor="#CCC"
             value={value.username}
-            style={{marginVertical: 20}}
+            style={{marginVertical: 12}}
             onChangeText={text =>
               setValue(value => ({...value, username: text}))
             }
@@ -171,7 +164,7 @@ function SignIn(props) {
               setValue(value => ({...value, password: text}))
             }
             secureTextEntry
-            style={{marginVertical: 20}}
+            style={{marginVertical: 12}}
           />
           <HelperText type="error" visible={_hasePasswordErrors()}>
             Password must contain atleast 8 character!
@@ -179,7 +172,7 @@ function SignIn(props) {
 
           <CheckBox
             title="Keeped me login  "
-            checked={value.checked}
+            checked={checked}
             containerStyle={{
               borderWidth: 0,
               backgroundColor: '#fff',
@@ -187,9 +180,7 @@ function SignIn(props) {
             }}
             checkedColor="#5D3EFF"
             textStyle={{fontWeight: '400', color: '#000'}}
-            onPress={() =>
-              setValue(value => ({...value, checked: !value.checked}))
-            }
+            onPress={() => onChecked()}
           />
           <Button
             icon={!props.authenticatedata.isLoading ? 'login' : 'loading'}
@@ -204,7 +195,7 @@ function SignIn(props) {
           </Button>
           <TouchableRipple
             onPress={() => props.navigation.navigate('Registration')}
-            style={{marginVertical: 20, alignItems: 'center'}}
+            style={{marginVertical: 12, alignItems: 'center'}}
             rippleColor="#000">
             <Text>Registration</Text>
           </TouchableRipple>
@@ -218,7 +209,10 @@ const mapStateToProps = store => ({
   authenticatedata: store.userAuthencation,
 });
 
-export default compose(connect(mapStateToProps))(SignIn);
+export default compose(
+  connect(mapStateToProps),
+  withUserInfo,
+)(SignIn);
 
 const styles = StyleSheet.create({
   container: {
@@ -236,6 +230,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  avatar: {alignItems: 'center', flex: 1, marginTop: '18%'},
-  inputForm: {flex: 2},
+  avatar: {
+    alignItems: 'center',
+    flex: 1,
+    marginTop: '28%',
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+  inputForm: {flex: 2, justifyContent: 'center', alignContent: 'center'},
 });

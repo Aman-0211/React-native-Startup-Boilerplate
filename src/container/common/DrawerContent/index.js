@@ -17,7 +17,7 @@ import {
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {styles} from './styles';
 import {Icon} from 'react-native-elements';
-import {signOut} from '../../../shared/store';
+import {withUserInfo} from '../../../framework';
 import {RESET_USER_DATA} from '../../../shared/store/constants';
 
 function DrawerContent(props) {
@@ -29,14 +29,13 @@ function DrawerContent(props) {
   };
 
   const SignOut = async () => {
+    console.log('proinside signoutps', props);
     props.dispatch({
       type: RESET_USER_DATA,
     });
-    console.log('proinside signoutps');
     await AsyncStorage.clear();
   };
 
-  const {user} = props.authenticatedata.data;
   return (
     <View
       style={{
@@ -63,7 +62,7 @@ function DrawerContent(props) {
                       ? props.theme.lightTheme.text
                       : props.theme.darkTheme.text,
                   }}>
-                  {`${user ? user.name : null} ${user ? user.lastname : null}`}
+                  {`${''} ${''}`}
                 </Title>
                 <Caption
                   style={{
@@ -71,7 +70,7 @@ function DrawerContent(props) {
                       ? props.theme.lightTheme.text
                       : props.theme.darkTheme.text,
                   }}>
-                  {user ? user.email : null}
+                  {'email'}
                 </Caption>
               </View>
             </View>
@@ -306,4 +305,8 @@ const mapStateToProps = store => ({
   authenticatedata: store.userAuthencation,
 });
 
-export default connect(mapStateToProps)(withTheme(DrawerContent));
+export default compose(
+  connect(mapStateToProps),
+  withUserInfo,
+  withTheme,
+)(DrawerContent);

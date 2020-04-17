@@ -4,9 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 export const DEVICE_WIDTH = Dimensions.get('window').width;
 export const DEVICE_HEIGHT = Dimensions.get('window').height;
 
-export function setUserInfo(data, checked) {
-  console.log(data, checked);
-
+export function setUserInfo(data) {
   try {
     return Promise.all(
       AsyncStorage.multiSet([
@@ -15,7 +13,6 @@ export function setUserInfo(data, checked) {
         ['email', data.user.email || ''],
         ['firstName', data.user.name || ''],
         ['lastName', data.user.lastname || ''],
-        ['keep_me_logged_in', `${checked}` || 'false'],
       ]),
     );
   } catch (error) {

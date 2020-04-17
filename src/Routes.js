@@ -9,7 +9,7 @@ import {createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
 import {DrawerContent} from '../src/container/common';
 import {HeaderView} from '../src/component';
 import {Apps, Setting, SignIn, SignUp} from './container';
-import {getUserInfo} from './shared/store';
+import {withUserInfo} from './framework';
 
 const Stack = createStackNavigator();
 
@@ -67,12 +67,12 @@ function MyDrawer() {
   );
 }
 
-const RootStack = props => {
-  console.log(props);
+const RootStack = ({isauthenticate, userInfo, ...rest}) => {
+  console.log('========++++++++', isauthenticate, userInfo, rest);
 
   return (
     <NavigationContainer>
-      {props.authenticatedata.loggedin ? <MyDrawer /> : <AuthStack />}
+      {isauthenticate ? <MyDrawer /> : <AuthStack />}
     </NavigationContainer>
   );
 };
@@ -80,4 +80,7 @@ const RootStack = props => {
 const mapStateToProps = store => ({
   authenticatedata: store.userAuthencation,
 });
-export default connect(mapStateToProps)(RootStack);
+export default compose(
+  connect(mapStateToProps),
+  withUserInfo,
+)(RootStack);
