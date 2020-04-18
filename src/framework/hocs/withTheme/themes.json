@@ -1,0 +1,16 @@
+[
+  {
+    "key": "LIGHT_THEME",
+    "backgroundColor": "#ffffff",
+    "color": "#000000",
+    "fontSize": 14,
+    "fontColor": "#000000"
+  },
+  {
+    "key": "DARK_THEME",
+    "backgroundColor": "#2b2a2a",
+    "color": "#ffffff",
+    "fontSize": 14,
+    "fontColor": "#ffffff"
+  }
+]

@@ -28,7 +28,7 @@ import {
   GET_USER_AUTHENTICATION,
   GET_USER_AUTHENTICATION_FAIL,
 } from '../../../shared/store/constants';
-import {withUserInfo} from '../../../framework';
+import {withUserInfo, withTheme} from '../../../framework';
 
 export const AVTAR_HEIGHT = DEVICE_WIDTH / 4;
 export const AVTAR_HEIGHT_SMALL =
@@ -93,6 +93,7 @@ function SignIn(props) {
       await AsyncStorage.setItem('keepLoggedIn', 'false');
     }
   }
+  console.log(props);
 
   const onSubmit = async () => {
     try {
@@ -211,6 +212,7 @@ const mapStateToProps = store => ({
 
 export default compose(
   connect(mapStateToProps),
+  withTheme,
   withUserInfo,
 )(SignIn);
 

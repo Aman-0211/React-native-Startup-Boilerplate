@@ -1,40 +1,36 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {Provider} from 'react-redux';
-import {DefaultTheme, Provider as ThemeProvider} from 'react-native-paper';
 import SplashScreen from 'react-native-splash-screen';
 import {configureStore, getUserInfo} from '../src/shared/store';
 import RootStack from '../src/Routes';
 import AsyncStorage from '@react-native-community/async-storage';
-import {UserInfoProvider} from './framework';
+import {UserInfoProvider, ThemeProvider} from './framework';
 
 export const store = configureStore(axios, {});
 
-function App(props) {
+function App() {
   const [state, setState] = useState({
     isauthenticate: false,
     userInfo: {},
   });
 
-  const theme = {
-    ...DefaultTheme,
-    dark: true,
-    lightTheme: {
-      ...DefaultTheme.colors,
-      primary: 'tomato',
-      accent: 'black',
-      background: '#fff',
+  const theme = [
+    {
+      key: 'LIGHT_THEME',
+      backgroundColor: '#ffffff',
+      color: '#000000',
+      fontSize: 14,
+      fontColor: '#000000',
     },
-    darkTheme: {
-      ...DefaultTheme.colors,
-      primary: 'tomato',
-      accent: 'black',
-      background: '#2b2a2a',
-      text: '#fff',
-      onBackground: '#fff',
+    {
+      key: 'DARK_THEME',
+      backgroundColor: '#2b2a2a',
+      color: '#ffffff',
+      fontSize: 14,
+      fontColor: '#ffffff',
     },
-  };
-
+  ];
   const isUserAuthenticated = () => {
     return new Promise(async resolve => {
       const keepMeLoggedin = JSON.parse(
@@ -83,14 +79,17 @@ function App(props) {
 
   useEffect(() => {
     fetchUser();
-    SplashScreen.hide();
   }, []);
+
+  useEffect(() => {
+    SplashScreen.hide();
+  });
 
   const {userInfo} = state;
 
   return (
     <UserInfoProvider value={userInfo}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider>
         <Provider store={store}>
           <RootStack {...state} />
         </Provider>

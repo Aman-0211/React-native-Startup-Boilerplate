@@ -11,34 +11,34 @@ import {HeaderView} from '../src/component';
 import {Apps, Setting, SignIn, SignUp} from './container';
 import {withUserInfo} from './framework';
 
-const Stack = createStackNavigator();
-
-function AuthStack() {
+const AuthStack = createStackNavigator();
+function Auth() {
   return (
-    <Stack.Navigator initialRouteName="SignIn">
-      <Stack.Screen
+    <AuthStack.Navigator initialRouteName="SignIn">
+      <AuthStack.Screen
         name="Login"
         component={SignIn}
         options={{headerShown: false}}
       />
-      <Stack.Screen
+      <AuthStack.Screen
         name="Registration"
         component={SignUp}
         options={{headerShown: false}}
       />
-    </Stack.Navigator>
+    </AuthStack.Navigator>
   );
 }
 
+const MainStack = createStackNavigator();
 function DashBoard() {
   return (
-    <Stack.Navigator
+    <MainStack.Navigator
       initialRouteName="Home"
       screenOptions={{
         header: HeaderView,
       }}>
-      <Stack.Screen name="Home" component={Apps} />
-    </Stack.Navigator>
+      <MainStack.Screen name="Home" component={Apps} />
+    </MainStack.Navigator>
   );
 }
 
@@ -68,11 +68,11 @@ function MyDrawer() {
 }
 
 const RootStack = ({isauthenticate, userInfo, ...rest}) => {
-  console.log('========++++++++', isauthenticate, userInfo, rest);
+  console.log('isAuthenticated', isauthenticate);
 
   return (
     <NavigationContainer>
-      {isauthenticate ? <MyDrawer /> : <AuthStack />}
+      {isauthenticate ? <MyDrawer /> : <Auth />}
     </NavigationContainer>
   );
 };
